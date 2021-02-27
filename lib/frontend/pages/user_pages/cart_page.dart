@@ -21,6 +21,9 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  int count = 0;
+  List<Product> productsListFromCart;
+
   Future<String> setTotalPrice() async {
     int totalPrice = 0;
     List<Cart> items = await CartDB().getCartList();
@@ -33,6 +36,13 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     var theme = Provider.of<ThemeProvider>(context);
+    List<Cart> cartList = Provider.of<List<Cart>>(context);
+
+    if (productsListFromCart == null) {
+      productsListFromCart = List<Product>();
+      updateListView();
+    }
+
     return Scaffold(
       appBar: GlobalAppBar(
         icon: Icons.arrow_back_ios_rounded,
@@ -129,20 +139,18 @@ class _CartPageState extends State<CartPage> {
 /*---------------------------------------------------------------------------------*/
 /*---------------------------------  Delete Btn  ----------------------------------*/
 /*---------------------------------------------------------------------------------*/
-                                trailing: StreamBuilder(
-                                  stream:  CartDB().getData(),
-                                  builder: (context, snapshot) {
-                                    return IconButton(
-                                      icon: const Icon(Icons.delete_sweep_outlined),
-                                      color: Theme.of(context).primaryColor,
-                                      onPressed: () {
-                                        CartDB().deleteData(snapshot.data[index]);
-                                        setState(() {
-                                          CartDB().getProductsCart();
-                                        });
-                                      },
-                                    );
-                                  }
+                                trailing:
+                                (cartList == null) ? CircularProgressIndicator():
+                                IconButton(
+                                  icon: const Icon(Icons.delete_sweep_outlined),
+                                  color: Theme.of(context).primaryColor,
+                                  onPressed: () {
+                                    CartDB().deleteData(cartList[index]);
+                                    setState(() {
+                                      updateListView();
+                                    });
+
+                                  },
                                 ),
                                 onTap: () {
                                   Navigator.of(context)
@@ -163,99 +171,97 @@ class _CartPageState extends State<CartPage> {
 /*---------------------------------------------------------------------------------*/
 /*-------------------------------  Quantity Widget  -------------------------------*/
 /*---------------------------------------------------------------------------------*/
-                                    FutureBuilder(
-                                        future: CartDB().getCartList(),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData) {
-                                            return CircularProgressIndicator();
-                                          } else {
-                                            Cart cartData = snapshot.data[index];
-                                            return Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                IconButton(
-                                                  icon: Icon(Icons.share_outlined),
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                  onPressed: () {},
-                                                ),
-                                                GradientContainer(
-                                                  radius: 80,
-                                                  width: 120,
-                                                  height: 40,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      GradientBorder(
-                                                        radius: 80,
-                                                        width: 40,
-                                                        height: 40,
-                                                        child: GradientWidget(
-                                                          child: IconButton(
-                                                            icon: const Icon(
-                                                              Icons.remove,
-                                                              size: 20,
-                                                            ),
-                                                            onPressed: () {
-                                                              CartDB().updateData(Cart(
-                                                                id: cartData.id,
-                                                                price: cartData.price,
-                                                                productId: cartData.productId,
-                                                                quantity: (int.parse(cartData.quantity)-1).toString(),
-                                                              ));
-                                                              setState(() {
-                                                                CartDB().getProductsCart();
-                                                              });
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        cartData.quantity,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText1,
-                                                      ),
-                                                      GradientBorder(
-                                                        radius: 80,
-                                                        width: 40,
-                                                        height: 40,
-                                                        child: GradientWidget(
-                                                          child: IconButton(
-                                                            icon: const Icon(
-                                                              Icons.add,
-                                                              size: 20,
-                                                            ),
-                                                            onPressed: () {
-                                                              CartDB().updateData(Cart(
-                                                                id: cartData.id,
-                                                                price: cartData.price,
-                                                                productId: cartData.productId,
-                                                                quantity: (int.parse(cartData.quantity)+1).toString(),
-                                                              ));
-                                                              setState(() {
-                                                                CartDB().getProductsCart();
-                                                              });
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "${products[index].price} \$",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1,
-                                                ),
-                                              ],
-                                            );
-                                          }
-                                        }),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceAround,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.share_outlined),
+                              color: Theme.of(context)
+                                  .primaryColor,
+                              onPressed: () {},
+                            ),
+                            (cartList == null) ? CircularProgressIndicator():
+                            GradientContainer(
+                              radius: 80,
+                              width: 120,
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment
+                                    .spaceBetween,
+                                children: [
+                                  GradientBorder(
+                                    radius: 80,
+                                    width: 40,
+                                    height: 40,
+                                    child: GradientWidget(
+                                      child: IconButton(
+                                        icon: const Icon(
+                                          Icons.remove,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          CartDB().updateData(Cart(
+                                            id: cartList[index].id,
+                                            price: cartList[index].price,
+                                            productId: cartList[index].productId,
+                                            quantity: (int.parse(cartList[index].quantity)-1).toString(),
+                                          ));
+                                          setState(() {
+                                            updateListView();
+                                          });
+                                          // setState(() {
+                                          //   CartDB().getProductsCart();
+                                          // });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    (cartList == null) ? 1 : cartList[index].quantity,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1,
+                                  ),
+                                  GradientBorder(
+                                    radius: 80,
+                                    width: 40,
+                                    height: 40,
+                                    child: GradientWidget(
+                                      child: IconButton(
+                                        icon: const Icon(
+                                          Icons.add,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          CartDB().updateData(Cart(
+                                            id: cartList[index].id,
+                                            price: cartList[index].price,
+                                            productId: cartList[index].productId,
+                                            quantity: (int.parse(cartList[index].quantity)+1).toString(),
+                                          ));
+                                          setState(() {
+                                            updateListView();
+                                          });
+                                          // setState(() {
+                                          //   CartDB().getProductsCart();
+                                          // });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Text(
+                              "${products[index].price} \$",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1,
+                            ),
+                          ],
+                        ),
                                   ],
                                 ),
                               ),
@@ -333,5 +339,16 @@ class _CartPageState extends State<CartPage> {
         ),
       ),
     );
+  }
+
+
+  updateListView() {
+      Future<List<Product>> noteListFuture = CartDB().getProductsFromCart();
+      noteListFuture.then((value) {
+        setState(() {
+          this.productsListFromCart = value;
+          this.count = value.length;
+        });
+      });
   }
 }

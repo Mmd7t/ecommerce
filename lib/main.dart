@@ -4,10 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce/landing_page.dart';
+import 'backend/models/cart.dart';
 import 'backend/models/product.dart';
 import 'backend/providers/admin_provider.dart';
 import 'backend/providers/auth_provider.dart';
 import 'backend/providers/theme_provider.dart';
+import 'backend/services/db_cart.dart';
 import 'backend/services/db_products.dart';
 import 'constants.dart';
 import 'frontend/pages/admin_pages/add_product.dart';
@@ -70,7 +72,8 @@ class MyApp extends StatelessWidget {
 /*----------------------------------------------------------------------------------------------*/
 /*--------------------------------------  Cart Provider  ---------------------------------------*/
 /*----------------------------------------------------------------------------------------------*/
-        // ChangeNotifierProvider(create: (context) => CartProvider()),
+        StreamProvider<List<Cart>>(
+            create: (context) => CartDB().getData()),
       ],
       builder: (context, child) => child,
       child: Consumer<ThemeProvider>(

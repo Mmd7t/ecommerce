@@ -1,10 +1,8 @@
 import 'package:ecommerce/backend/models/cart.dart';
 import 'package:ecommerce/backend/models/product.dart';
-// import 'package:ecommerce/backend/providers/cart_provider.dart';
 import 'package:ecommerce/backend/providers/theme_provider.dart';
 import 'package:ecommerce/backend/services/db_cart.dart';
 import 'package:ecommerce/backend/services/db_products.dart';
-import 'package:ecommerce/backend/services/db_users.dart';
 import 'package:ecommerce/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

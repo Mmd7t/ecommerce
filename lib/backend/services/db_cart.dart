@@ -22,25 +22,25 @@ class CartDB extends DB {
         .delete();
   }
 
-
-  Future<bool> getDataById(id) async{
-    List<Cart> carts=  await _db
+  Future<bool> getDataById(id) async {
+    List<Cart> carts = await _db
         .collection(userCollectionName)
         .doc(UsersDB().getId())
         .collection(cartCollectionName)
         .where('productId', isEqualTo: id)
-        .get().then((value) => value.docs.map((e) => Cart.fromMap(e.data())).toList());
+        .get()
+        .then(
+            (value) => value.docs.map((e) => Cart.fromMap(e.data())).toList());
 
-    for(var i=0; i<carts.length; i++){
+    for (var i = 0; i < carts.length; i++) {
       if (carts[i].productId == id) {
         return true;
-      }else{
+      } else {
         return false;
       }
     }
     return null;
   }
-
 
 /*-----------------------------------------------------------------------------------------------------*/
 /*----------------------------------------  Get Cart List  --------------------------------------------*/
@@ -105,7 +105,8 @@ class CartDB extends DB {
     await _db
         .collection(userCollectionName)
         .doc(UsersDB().getId())
-        .collection(cartCollectionName).orderBy('id' , descending: true)
+        .collection(cartCollectionName)
+        .orderBy('id', descending: true)
         .get()
         .then((value) {
       itemLength = value.docs.length;
@@ -127,6 +128,7 @@ class CartDB extends DB {
     }
     yield productCartItems;
   }
+
 
 /*-----------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------  Get Id  -----------------------------------------------*/
