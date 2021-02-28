@@ -1,3 +1,5 @@
+import 'package:ecommerce/backend/models/product_fav.dart';
+import 'package:ecommerce/backend/services/db_fav.dart';
 import 'package:provider/provider.dart';
 import 'package:ecommerce/backend/providers/theme_provider.dart';
 import 'package:ecommerce/constants.dart';
@@ -13,101 +15,128 @@ class Wishlist extends StatelessWidget {
     var theme = Provider.of<ThemeProvider>(context);
     return AnimatedContainer(
       duration: Duration(milliseconds: 1000),
-      child: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          /*-------------------------------  Slidable  -------------------------------*/
-          return Slidable(
-            actionPane: SlidableDrawerActionPane(),
-            movementDuration: Duration(milliseconds: 200),
-            actionExtentRatio: 0.20,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              child: GradientBorder(
-                color: (theme.theme)
-                    ? bottomNavColorDark
-                    : Theme.of(context).scaffoldBackgroundColor,
-                radius: 20,
-                opacity: 0.6,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    /*---------------------  Leading  ---------------------*/
-                    leading: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        GradientBorder(
-                          radius: 100,
-                          opacity: 0.3,
-                          color: (theme.theme)
-                              ? bottomNavColorDark
-                              : Theme.of(context).scaffoldBackgroundColor,
-                          width: MediaQuery.of(context).size.width / 9,
-                          height: MediaQuery.of(context).size.width / 9,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: GradientBorder(
-                              opacity: 0.3,
-                              radius: 100,
-                              color: (theme.theme)
-                                  ? bottomNavColorDark
-                                  : Theme.of(context).scaffoldBackgroundColor,
-                              width: MediaQuery.of(context).size.width / 9,
-                              height: MediaQuery.of(context).size.width / 9,
-                              child: Text(''),
+      child: StreamBuilder<List<ProductFav>>(
+          stream: FavDB().getProductsFav(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              final favProduct = snapshot.data;
+              if (favProduct == null) {
+                return Scaffold(
+                  body: Center(
+                    child: Text('Wish list is empty',
+                        style: Theme.of(context).textTheme.headline6),
+                  ),
+                );
+              }
+              print(favProduct);
+              //here
+              return ListView.builder(
+                itemCount: favProduct.length,
+                itemBuilder: (context, index) {
+                  /*-------------------------------  Slidable  -------------------------------*/
+                  return Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    movementDuration: Duration(milliseconds: 200),
+                    actionExtentRatio: 0.20,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 5),
+                      child: GradientBorder(
+                        color: (theme.theme)
+                            ? bottomNavColorDark
+                            : Theme.of(context).scaffoldBackgroundColor,
+                        radius: 20,
+                        opacity: 0.6,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            /*---------------------  Leading  ---------------------*/
+                            leading: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                GradientBorder(
+                                  radius: 100,
+                                  opacity: 0.3,
+                                  color: (theme.theme)
+                                      ? bottomNavColorDark
+                                      : Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                  width: MediaQuery.of(context).size.width / 9,
+                                  height: MediaQuery.of(context).size.width / 9,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: GradientBorder(
+                                      opacity: 0.3,
+                                      radius: 100,
+                                      color: (theme.theme)
+                                          ? bottomNavColorDark
+                                          : Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                      width:
+                                          MediaQuery.of(context).size.width / 9,
+                                      height:
+                                          MediaQuery.of(context).size.width / 9,
+                                      child: Text(''),
+                                    ),
+                                  ),
+                                ),
+                                Image.network(favProduct[index].product.img),
+                              ],
                             ),
+                            /*---------------------  Title  ---------------------*/
+                            title: Text(
+                              favProduct[index].product.name,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            /*---------------------  SubTitle  ---------------------*/
+                            subtitle: Text(
+                              favProduct[index].product.description,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            /*---------------------  Trailling  ---------------------*/
+                            trailing: IconButton(
+                              icon: Icon(Icons.share_outlined),
+                              color: Theme.of(context).primaryColor,
+                              onPressed: () {},
+                            ),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(ProductInfo.routeName);
+                            },
                           ),
                         ),
-                        Image.asset('assets/hummar.png'),
-                      ],
+                      ),
                     ),
-                    /*---------------------  Title  ---------------------*/
-                    title: Text(
-                      "Jack Hammer",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    /*---------------------  SubTitle  ---------------------*/
-                    subtitle: Text(
-                      "Not for sale yakhoyaaaa",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    /*---------------------  Trailling  ---------------------*/
-                    trailing: IconButton(
-                      icon: Icon(Icons.share_outlined),
-                      color: Theme.of(context).primaryColor,
-                      onPressed: () {},
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pushNamed(ProductInfo.routeName);
-                    },
-                  ),
-                ),
-              ),
-            ),
-            /*-------------------------------  Cart IconButton  -------------------------------*/
-            actions: <Widget>[
-              actionButton(
-                context,
-                icon: Icons.add_shopping_cart_rounded,
-                onClick: () {
-                  print("cart");
+                    /*-------------------------------  Cart IconButton  -------------------------------*/
+                    actions: <Widget>[
+                      actionButton(
+                        context,
+                        icon: Icons.add_shopping_cart_rounded,
+                        onClick: () {
+                          print("cart");
+                        },
+                      ),
+                    ],
+                    /*-------------------------------  Favorite IconButton  -------------------------------*/
+                    secondaryActions: <Widget>[
+                      actionButton(
+                        context,
+                        icon: Icons.favorite_outline,
+                        onClick: () {
+                          print("fav");
+                        },
+                      ),
+                    ],
+                  );
                 },
-              ),
-            ],
-            /*-------------------------------  Favorite IconButton  -------------------------------*/
-            secondaryActions: <Widget>[
-              actionButton(
-                context,
-                icon: Icons.favorite_outline,
-                onClick: () {
-                  print("fav");
-                },
-              ),
-            ],
-          );
-        },
-      ),
+              );
+            }
+
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
     );
   }
 

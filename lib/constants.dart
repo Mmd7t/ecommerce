@@ -44,3 +44,4 @@ toast(msg) {
 const String productCollectionName = 'products';
 const String userCollectionName = 'users';
 const String cartCollectionName = 'cart';
+const String favCollectionName = 'wishlist';

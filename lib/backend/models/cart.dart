@@ -1,31 +1,30 @@
 class Cart {
-  String id;
-  String productId;
   String quantity;
-  String price;
+  String productId;
+  bool isAddToCart;
 
   Cart({
-    this.id,
-    this.productId,
     this.quantity,
-    this.price,
+    this.productId,
+    this.isAddToCart,
   });
 
   factory Cart.fromMap(Map<String, dynamic> data) {
+    if (data == null) {
+      return null;
+    }
     return Cart(
-      id: data['id'],
       productId: data['productId'],
       quantity: data['quantity'],
-      price: data['price'],
+      isAddToCart: data['isAddToCart'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'productId': productId,
       'quantity': quantity,
-      'price': price,
+      'productId': productId,
+      'isAddToCart': isAddToCart,
     };
   }
 }
