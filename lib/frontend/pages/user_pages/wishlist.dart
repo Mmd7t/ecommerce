@@ -1,4 +1,6 @@
+import 'package:ecommerce/backend/models/cart.dart';
 import 'package:ecommerce/backend/models/product_fav.dart';
+import 'package:ecommerce/backend/services/db_cart.dart';
 import 'package:ecommerce/backend/services/db_fav.dart';
 import 'package:provider/provider.dart';
 import 'package:ecommerce/backend/providers/theme_provider.dart';
@@ -101,8 +103,9 @@ class Wishlist extends StatelessWidget {
                               onPressed: () {},
                             ),
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(ProductInfo.routeName);
+                              Navigator.of(context).pushNamed(
+                                  ProductInfo.routeName,
+                                  arguments: favProduct[index].product.id);
                             },
                           ),
                         ),
@@ -114,7 +117,10 @@ class Wishlist extends StatelessWidget {
                         context,
                         icon: Icons.add_shopping_cart_rounded,
                         onClick: () {
-                          print("cart");
+                          CartDB().saveData(Cart(
+                              isAddToCart: true,
+                              productId: favProduct[index].product.id,
+                              quantity: 1.toString()));
                         },
                       ),
                     ],
@@ -122,9 +128,9 @@ class Wishlist extends StatelessWidget {
                     secondaryActions: <Widget>[
                       actionButton(
                         context,
-                        icon: Icons.favorite_outline,
+                        icon: Icons.remove_circle_outline,
                         onClick: () {
-                          print("fav");
+                          FavDB().deleteData(favProduct[index].product.id);
                         },
                       ),
                     ],

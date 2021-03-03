@@ -11,6 +11,7 @@ import 'package:ecommerce/frontend/widgets/gradient_container.dart';
 import 'package:ecommerce/frontend/widgets/gradient_widget.dart';
 
 import '../../../constants.dart';
+import 'product_info.dart';
 
 class CartPage extends StatelessWidget {
   static const String routeName = 'cartPage';
@@ -140,8 +141,9 @@ class CartPage extends StatelessWidget {
                                 },
                               ),
                               onTap: () {
-                                // Navigator.of(context)
-                                //     .pushNamed(ProductInfo.routeName,arguments: products[index].id);
+                                Navigator.of(context).pushNamed(
+                                    ProductInfo.routeName,
+                                    arguments: cartProduct[index].product.id);
                               },
                             ),
                             Container(
@@ -200,12 +202,6 @@ class CartPage extends StatelessWidget {
                                                           .toString(),
                                                       isAddToCart: true,
                                                     ));
-                                                    // setState(() {
-                                                    //   updateListView();
-                                                    // });
-                                                    // setState(() {
-                                                    //   CartDB().getProductsCart();
-                                                    // });
                                                   },
                                                 ),
                                               ),

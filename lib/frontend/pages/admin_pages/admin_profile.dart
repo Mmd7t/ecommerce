@@ -22,7 +22,7 @@ class AdminProfile extends StatelessWidget {
             ),
             /*----------------------------------  Profile Image  ------------------------------------*/
             Stack(
-              overflow: Overflow.visible,
+              clipBehavior: Clip.none,
               children: [
                 GradientBorder(
                   width: MediaQuery.of(context).size.width * 0.25,

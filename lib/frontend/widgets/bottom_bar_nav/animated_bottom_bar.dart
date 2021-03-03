@@ -1,4 +1,6 @@
+import 'package:ecommerce/backend/models/cart.dart';
 import 'package:ecommerce/backend/providers/theme_provider.dart';
+import 'package:ecommerce/backend/services/db_cart.dart';
 import 'package:ecommerce/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +36,7 @@ class _AnimatedBottomBarState extends State<AnimatedBottomBar>
   /*---------------------------  Function buildBarItems  -----------------------------*/
 
   List<Widget> _buildBarItems() {
-    List<Widget> _barItems = List();
+    List<Widget> _barItems = [];
     for (int i = 0; i < widget.barItems.length; i++) {
       BarItem item = widget.barItems[i];
       bool isSelected = selectedBarIndex == i;
@@ -130,9 +132,7 @@ class _AnimatedBottomBarState extends State<AnimatedBottomBar>
               : Expanded(
                   child: _animatedBottomBarBody(theme),
                 ),
-          SizedBox(
-            width: 5,
-          ),
+          const SizedBox(width: 5),
           /*---------------------------------  Floating Btn  ---------------------------------*/
           Stack(
             children: [
@@ -162,16 +162,28 @@ class _AnimatedBottomBarState extends State<AnimatedBottomBar>
                 radius: 50,
               ),
               (widget.isAdminPage)
-                  ? SizedBox()
-                  : Positioned(
-                      right: 0,
-                      top: 0,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.red,
-                        child: Text(""),
-                        radius: 7.5,
-                      ),
-                    ),
+                  ? const SizedBox()
+                  : StreamBuilder<List<Cart>>(
+                      stream: CartDB().getData(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const SizedBox();
+                        } else {
+                          return Positioned(
+                            right: 0,
+                            top: 0,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.red,
+                              child: Text(
+                                '${snapshot.data.length}',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                              maxRadius: 8,
+                            ),
+                          );
+                        }
+                      }),
             ],
           ),
         ],

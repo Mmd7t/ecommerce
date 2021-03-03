@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/backend/models/fav.dart';
-import 'package:ecommerce/backend/models/product_cart.dart';
-import 'package:ecommerce/backend/models/cart.dart';
 import 'package:ecommerce/backend/models/product.dart';
 import 'package:ecommerce/backend/models/product_fav.dart';
 import 'package:ecommerce/backend/services/db_products.dart';

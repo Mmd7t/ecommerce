@@ -10,9 +10,8 @@ class Categories extends StatelessWidget {
       duration: Duration(milliseconds: 500),
       child: StaggeredGridView.countBuilder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
         crossAxisCount: 4,
-        itemCount: 50,
+        itemCount: 10,
         itemBuilder: (BuildContext context, int index) {
           return GradientContainer(
             radius: 20,

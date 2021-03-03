@@ -96,7 +96,7 @@ class AuthProvider implements Auth {
 /*-------------------------------  Connect With Facebook  --------------------------------*/
 /*----------------------------------------------------------------------------------------*/
   @override
-  connectWithFacebook() async {
+  Future connectWithFacebook() async {
     facebookLogin.logIn(['email']).then((value) {
       if (value.status == FacebookLoginStatus.loggedIn) {
         final FacebookAuthCredential facebookAuthCredential =
@@ -105,7 +105,7 @@ class AuthProvider implements Auth {
       } else if (value.status == FacebookLoginStatus.error) {
         print('errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
       }
-    }).catchError((e) => print(e));
+    });
   }
 
 /*----------------------------------------------------------------------------------------*/
