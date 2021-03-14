@@ -17,9 +17,7 @@ class AdminProfile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             /*----------------------------------  Profile Image  ------------------------------------*/
             Stack(
               clipBehavior: Clip.none,
@@ -28,9 +26,7 @@ class AdminProfile extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.25,
                   height: MediaQuery.of(context).size.width * 0.25,
                   radius: 100,
-                  child: ClipOval(
-                    child: Image.asset('assets/profile.jpg'),
-                  ),
+                  child: const FlutterLogo(),
                 ),
                 Positioned(
                   bottom: 0,
@@ -41,7 +37,7 @@ class AdminProfile extends StatelessWidget {
                     height: 35,
                     child: GradientWidget(
                       child: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.camera_alt_outlined,
                           size: 15,
                         ),
@@ -52,9 +48,7 @@ class AdminProfile extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             /*----------------------------------  Profile Name  ------------------------------------*/
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -66,15 +60,13 @@ class AdminProfile extends StatelessWidget {
                 ),
                 GradientWidget(
                   child: IconButton(
-                    icon: Icon(Icons.edit_outlined),
+                    icon: const Icon(Icons.edit_outlined),
                     onPressed: () {},
                   ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 30),
             /*----------------------------------  Profile List  ------------------------------------*/
             ListView.builder(
               itemCount: 3,
@@ -92,33 +84,31 @@ class AdminProfile extends StatelessWidget {
                       onTap: () {
                         switch (index) {
                           case 0:
-                            showDialoge(context, Text("data 0"));
+                            showDialoge(context, const Text("data 0"));
                             break;
                           case 1:
-                            showDialoge(context, Text("data 1"));
+                            showDialoge(context, const Text("data 1"));
                             break;
                           case 2:
-                            showDialoge(context, Text("data 2"));
+                            showDialoge(context, const Text("data 2"));
                             break;
                           default:
                             break;
                         }
                       },
-                      title: Text("acc"),
+                      title: const Text("list"),
                       leading: GradientWidget(
-                        child: Icon(Icons.person_outline_rounded),
+                        child: const Icon(Icons.person_outline_rounded),
                       ),
                       trailing: GradientWidget(
-                        child: Icon(Icons.arrow_forward_ios_rounded),
+                        child: const Icon(Icons.arrow_forward_ios_rounded),
                       ),
                     ),
                   ),
                 );
               },
             ),
-            SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 30),
             /*----------------------------------  Logout Button  ------------------------------------*/
             SignBtn(
               onClick: () {
