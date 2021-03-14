@@ -2,8 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce/frontend/widgets/gradient_border.dart';
 import 'package:ecommerce/frontend/widgets/gradient_container.dart';
 import 'package:ecommerce/frontend/widgets/gradient_widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AdminDashboard extends StatelessWidget {
+  static const List<String> dashboard = [
+    'Products',
+    'Users',
+    'Orders',
+    'Salary',
+  ];
+
+  static const List<IconData> dashboardIcons = [
+    Icons.category_outlined,
+    Icons.group_outlined,
+    FontAwesomeIcons.firstOrderAlt,
+    Icons.attach_money_rounded,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,7 +28,7 @@ class AdminDashboard extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 5,
           mainAxisSpacing: 5,
-          childAspectRatio: 1,
+          childAspectRatio: 3.6 / 4,
         ),
         itemCount: dashboard.length,
         itemBuilder: (context, index) {
@@ -23,7 +38,8 @@ class AdminDashboard extends StatelessWidget {
             ),
             child: GradientContainer(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0)
+                      .copyWith(top: 15.0),
               radius: 15,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -33,7 +49,7 @@ class AdminDashboard extends StatelessWidget {
                     height: 50,
                     radius: 80,
                     child: GradientWidget(
-                      child: Icon(Icons.category_outlined),
+                      child: Icon(dashboardIcons[index]),
                     ),
                   ),
                   Text(
@@ -59,11 +75,3 @@ class AdminDashboard extends StatelessWidget {
     );
   }
 }
-
-List<String> dashboard = [
-  'Products',
-  'Users',
-  'Orders',
-  'Salary',
-  'Salary',
-];
